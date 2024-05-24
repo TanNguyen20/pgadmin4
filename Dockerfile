@@ -5,18 +5,21 @@ FROM dpage/pgadmin4:latest
 ENV PGADMIN_DEFAULT_EMAIL=admin@example.com
 ENV PGADMIN_DEFAULT_PASSWORD=admin
 
-# Run commands as root
+# Switch to root to perform setup tasks
 USER root
 
-# Create necessary directories and set permissions
-RUN mkdir -p /var/lib/pgadmin && \
-    chown -R 5050:5050 /var/lib/pgadmin
+# Ensure the necessary directories are created and set correct permissions
+RUN mkdir -p /var/lib/pgadmin /var/log/pgadmin /var/run/pgadmin && \
+    chown -R pgadmin:pgadmin /var/lib/pgadmin /var/log/pgadmin /var/run/pgadmin
 
-# Switch to the default user (5050:5050 is typically the pgadmin user in this image)
-USER 5050
+# Ensure the entrypoint script is executable
+RUN chmod +x /entrypoint.sh
+
+# Switch to the pgadmin user
+USER pgadmin
 
 # Expose the port pgAdmin runs on
 EXPOSE 80
 
 # Command to start pgAdmin
-CMD ["python3", "/pgadmin4/pgAdmin4.py"]
+CMD ["/entrypoint.sh"]
