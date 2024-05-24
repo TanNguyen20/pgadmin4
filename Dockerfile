@@ -7,6 +7,11 @@ ENV PGADMIN_DEFAULT_PASSWORD=admin
 
 # Perform directory setup and permission changes as root
 USER root
+
+# Ensure the pgadmin user and group exist
+RUN groupadd -r pgadmin && useradd -r -g pgadmin pgadmin
+
+# Create the necessary directories and set the correct permissions
 RUN mkdir -p /var/lib/pgadmin && \
     chown -R pgadmin:pgadmin /var/lib/pgadmin
 
