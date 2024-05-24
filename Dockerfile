@@ -5,11 +5,12 @@ FROM dpage/pgadmin4:latest
 ENV PGADMIN_DEFAULT_EMAIL=admin@example.com
 ENV PGADMIN_DEFAULT_PASSWORD=admin
 
-# Ensure the necessary directories are writable
+# Perform directory setup and permission changes as root
+USER root
 RUN mkdir -p /var/lib/pgadmin && \
     chown -R pgadmin:pgadmin /var/lib/pgadmin
 
-# Set the user to run the container
+# Switch to the pgadmin user
 USER pgadmin
 
 # Expose the port pgAdmin runs on
